@@ -1,1 +1,1 @@
-"# AI-Realtime-Gym-Coach" 
+The AI Realtime Gym Coach is an interactive computer vision application designed to assist users during workouts by analyzing their form in real time. Using a standard webcam or video feed, the application detects key body joints, tracks movement trajectories, counts repetitions, and provides instant audio or visual feedback to correct improper exercise techniques (e.g., squat depth, bicep curl range of motion).
