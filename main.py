@@ -251,6 +251,23 @@ def main():
         except Exception:
             pass
 
+        # Add TURN server if available
+        if turn_url:
+            turn_server = {
+                "urls": [url.strip() for url in turn_url.split(",")]
+            }
+
+            if turn_username and turn_credential:
+                turn_server["username"] = turn_username
+                turn_server["credential"] = turn_credential
+
+            ice_servers.append(turn_server)
+
+            st.success("TURN server configured")
+        else:
+            st.warning("Using STUN only. TURN is not configured.")
+
+
         rtc_configuration = {
             "iceServers": ice_servers
         }
