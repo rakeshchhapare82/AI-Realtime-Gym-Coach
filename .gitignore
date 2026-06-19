@@ -1,2 +1,8 @@
 .env
 *.env
+
+.venv/
+--pycache__/
+.idea/
+.streamlit/secrets.toml
+data.db

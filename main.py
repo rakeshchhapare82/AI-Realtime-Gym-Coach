@@ -207,18 +207,65 @@ def main():
             unsafe_allow_html=True,
         )
     else:
+        
+        # context = webrtc_streamer(
+        #     key="exercise-analysis",
+        #     mode=WebRtcMode.SENDRECV,
+        #     video_processor_factory=VideoProcessorClass,
+        #     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+        #     media_stream_constraints={
+        #         "video": True,
+        #         "audio": False
+        #     },
+        #     async_processing=True
+            
+        # )
+
+        # WebRTC STUN/TURN configuration
+        ice_servers = [
+            {"urls": ["stun:stun.l.google.com:19302"]}
+        ]
+
+        # Load TURN configuration from environment variables
+        turn_url = os.getenv("TURN_URL")
+        turn_username = os.getenv("TURN_USERNAME")
+        turn_credential = os.getenv("TURN_CREDENTIAL")
+
+        # Fallback to Streamlit secrets
+        if not turn_url:
+            turn_url = st.secrets.get("TURN_URL", None)
+            turn_username = st.secrets.get("TURN_USERNAME", None)
+            turn_credential = st.secrets.get("TURN_CREDENTIAL", None)
+
+        # Fallback to Streamlit secrets
+        try:
+            if not turn_url and "TURN_URL" in st.secrets:
+                turn_url = st.secrets["TURN_URL"]
+
+            if not turn_username and "TURN_USERNAME" in st.secrets:
+                turn_username = st.secrets["TURN_USERNAME"]
+
+            if not turn_credential and "TURN_CREDENTIAL" in st.secrets:
+                turn_credential = st.secrets["TURN_CREDENTIAL"]
+
+        except Exception:
+            pass
+
+        rtc_configuration = {
+            "iceServers": ice_servers
+        }
+
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+            rtc_configuration=rtc_configuration,
             media_stream_constraints={
                 "video": True,
                 "audio": False
             },
             async_processing=True
         )
-
         sync_metrics_update(context)
 
         if context.state.playing:
